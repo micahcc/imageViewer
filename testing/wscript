@@ -1,3 +1,11 @@
 
 def build(bld):
-    pass
+    bld.program(install_path='${PREFIX}/tests', 
+            target='hello_world', 
+            source='hello_world.cpp', 
+            use='WT')
+    
+    bld.program(install_path='${PREFIX}/tests', 
+            target='four_up', 
+            source='four_up.cpp', 
+            use='WT')

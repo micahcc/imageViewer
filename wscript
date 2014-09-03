@@ -12,7 +12,8 @@ def configure(conf):
     abspath = os.path.abspath
     
     opts = vars(conf.options)
-    conf.load('compiler_cxx python waf_unit_test')
+    conf.load('compiler_cxx waf_unit_test')
+    conf.load('etest', tooldir='waftools')
 
     env = conf.env
 
@@ -48,10 +49,14 @@ def configure(conf):
     # Library Configuration
     ############################### 
     conf.check_cfg(atleast_pkgconfig_version='0.0.0')
-    conf.check_cfg(package='zlib', uselib_store='ZLIB',
-                args=['--cflags', '--libs'])
-    conf.check_cfg(package='fftw3', uselib_store='FFTW',
-                args=['--cflags', '--libs'])
+    
+    env.LIB_WT = ['wt', 'wthttp']
+    env.HAVE_WT = conf.check(
+                lib=' '.join(env.LIB_OPENCL), 
+                header_name = 'Wt/WApplication',
+                mandatory = True, 
+                use ='WT', var = 'HAVE_WT',
+                define_name = 'HAVE_WT')
 
 def options(ctx):
     ctx.load('compiler_cxx waf_unit_test')
